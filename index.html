@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+
+<style>
+  #myCanvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+</style>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+
+<script>
+  var myCanvas = document.querySelector('#myCanvas');
+  var ctx = myCanvas.getContext('2d');
+  var lastCoords = {};
+
+  document.addEventListener('touchstart', e => {
+      e.preventDefault();
+
+      for (var i = 0; i < e.changedTouches.length; i++) {
+          var touch = e.changedTouches[i];
+
+          lastCoords[touch.identifier] = { x: touch.pageX, y: touch.pageY};
+      }
+    });
+  document.addEventListener('touchmove', e => {
+       e.preventDefault(); 
+
+       for (var i = 0; i < e.changedTouches.length; i++) {
+         var touch = e.changedTouches[i]; 
+
+         ctx.beginPath();
+         ctx.moveTo(lastCoords[touch.identifier].x, lastCoords[touch.identifier].y);
+         ctx.lineTo(touch.pageX, touch.pageY);
+         ctx.strokeStyle = '#ff0000';
+         ctx.stroke();
+         lastCoords[touch.identifier] = {x: touch.pageX, y: touch.pageY};
+       }
+  });
+  document.addEventListener('touchend', touchCancel);
+  document.addEventListener('touchcancel', touchCancel);
+
+  window.addEventListener('load', function() {
+    myCanvas.width = window.innerWidth;
+    myCanvas.height = window.innerHeight;
+  });
+
+  function touchCancel(e) {
+    for (var i = 0; i < e.changedTouches.length; i++) {
+      var touch = e.changedTouches[i];
+
+      delate: lastCoords[touch.identifier];
+    }
+  }
+</script>
+</body>
+</html>
